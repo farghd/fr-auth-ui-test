@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import { UsernameForm } from "./components/usernameForm";
+import { fetchPhotos } from "./utils";
+import { PhotoBox } from "./components/photoBox";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [user, setUser] = useState();
+  const [username, setUsername] = useState();
+  const [photos, setPhotos] = useState([]);
+
+  useEffect(() => {
+    fetchPhotos(setPhotos);
+  }, []);
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    setUsername(user);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {username && <h1>{username}</h1>}
+      <UsernameForm handler={submitHandler} setter={setUser} />
+      {photos.map((photo, i) => {
+        return <PhotoBox key={i} photo={photo} />;
+      })}
     </div>
   );
-}
+};
 
 export default App;
